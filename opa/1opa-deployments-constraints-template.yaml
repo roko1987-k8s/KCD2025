@@ -3,6 +3,8 @@ apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
   name: k8sdeploymentresources
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   crd:
     spec:

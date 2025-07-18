@@ -3,6 +3,8 @@ apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sDeploymentResources
 metadata:
   name: enforce-deployment-resources
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   match:
     kinds:

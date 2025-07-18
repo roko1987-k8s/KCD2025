@@ -1,0 +1,19 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sNamespaceAppNaming
+metadata:
+  name: enforce-namespace-resources
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Namespace"]
+    excludedNamespaces:
+      - kube-system
+      - gatekeeper-system
+      - default
+      - argocd
+      - ingress-nginx
+      - kube-node-lease
+      - kube-public
+      - kube-system
+      - kyverno

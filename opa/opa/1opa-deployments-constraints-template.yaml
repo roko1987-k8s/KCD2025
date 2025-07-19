@@ -1,0 +1,52 @@
+# templates/k8sdeploymentresources.yaml
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8sdeploymentresources
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sDeploymentResources
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sdeploymentresources
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Deployment"
+
+          container := input.review.object.spec.template.spec.containers[_]
+
+          not container.resources
+          msg := sprintf("El contenedor '%s' debe definir recursos (requests/limits)", [container.name])
+        }
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Deployment"
+
+          container := input.review.object.spec.template.spec.containers[_]
+
+          not container.resources.limits
+          msg := sprintf("El contenedor '%s' debe definir limits", [container.name])
+        }
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Deployment"
+
+          container := input.review.object.spec.template.spec.containers[_]
+
+          not container.resources.requests
+          msg := sprintf("El contenedor '%s' debe definir requests", [container.name])
+        }
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Deployment"
+
+          container := input.review.object.spec.template.spec.containers[_]
+          endswith(container.image, ":latest")
+          msg := sprintf("El contenedor '%s' usa imagen con tag 'latest'", [container.name])
+        }
+

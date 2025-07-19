@@ -1,0 +1,15 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRoleSecureVerbs
+metadata:
+  name: enforce-roles-resources-all
+spec:
+  match:
+    kinds:
+      - apiGroups: ["rbac.authorization.k8s.io"]
+        kinds: ["Role"]
+    namespaces:
+      - app1
+      - app2
+      - app3
+      - app4
+      - app5
